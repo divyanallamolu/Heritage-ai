@@ -4,6 +4,7 @@ import { Send, Sparkles, User, HelpCircle } from "lucide-react"
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import { sendChatMessage } from "../services/api"
+import { Container } from "../components/ui/Container"
 
 const initialMessages = [
   {
@@ -71,21 +72,24 @@ function AIChatPage() {
         <Navbar />
 
         {/* Header Block (ChatGPT Style) */}
-        <header className="max-w-[850px] w-full mx-auto px-6 pt-12 pb-4 text-center space-y-3">
-          <motion.h1
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-4xl font-black text-[#2f5233] tracking-tight flex items-center justify-center gap-2"
-          >
-            <Sparkles className="text-[#d4af37]" size={28} /> AI Heritage Assistant
-          </motion.h1>
-          <p className="text-xs sm:text-sm text-gray-500 font-light max-w-lg mx-auto leading-relaxed">
-            Ask questions about India's cultural traditions, elders, recipes, festivals, crafts, languages, and oral history.
-          </p>
+        <header className="pt-12 pb-4 text-center space-y-3">
+          <Container>
+            <motion.h1
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-4xl md:text-5xl font-bold text-[#2f5233] tracking-tight flex items-center justify-center gap-2"
+            >
+              <Sparkles className="text-[#d4af37]" size={28} /> AI Heritage Assistant
+            </motion.h1>
+            <p className="text-base text-gray-600 font-light max-w-lg mx-auto leading-relaxed">
+              Ask questions about India's cultural traditions, elders, recipes, festivals, crafts, languages, and oral history.
+            </p>
+          </Container>
         </header>
 
         {/* Centered Conversation Viewport */}
-        <main className="max-w-[850px] w-full mx-auto px-6 flex-1 flex flex-col justify-between pb-8">
+        <main className="flex-1 flex flex-col justify-between pb-8">
+          <Container>
           
           {/* Message Feed */}
           <div className="flex-1 space-y-6 py-6 overflow-y-auto min-h-[300px]">
@@ -140,6 +144,7 @@ function AIChatPage() {
             
             <div ref={messagesEndRef} />
           </div>
+          </Container>
 
           {/* Premium Suggestion Cards (Shown when only welcome message exists) */}
           {messages.length === 1 && (
@@ -168,8 +173,9 @@ function AIChatPage() {
           )}
 
           {/* Premium Prompt Input Area */}
-          <div className="sticky bottom-0 bg-[#faf7f0]/85 backdrop-blur-md pt-2 pb-4 w-full">
-            <div className="bg-white border border-[#e5ddc8] rounded-xl shadow-md p-3.5 flex items-end gap-3 transition focus-within:ring-2 focus-within:ring-[#8a9a5b] focus-within:border-[#8a9a5b]">
+          <div className="sticky bottom-0 bg-[#faf7f0]/85 backdrop-blur-md pt-2 pb-4">
+            <Container>
+              <div className="bg-white border border-[#e5ddc8] rounded-xl shadow-md p-3.5 flex items-end gap-3 transition focus-within:ring-2 focus-within:ring-[#8a9a5b] focus-within:border-[#8a9a5b]">
               
               {/* Auto-growing Textarea */}
               <textarea
@@ -197,7 +203,8 @@ function AIChatPage() {
                 <Send size={15} />
               </button>
 
-            </div>
+              </div>
+            </Container>
           </div>
 
         </main>

@@ -28,6 +28,9 @@ import { useAuth } from "../context/AuthContext"
 import { useLocation } from "react-router-dom"
 import { getInitials, formatDate, getAvatarGradient, truncate } from "../utils/helpers"
 import { CENTRAL_STORIES } from "../data/stories"
+import { WideContainer } from "../components/ui/Container"
+import { CompactCard } from "../components/ui/Card"
+import { Button, SmallButton } from "../components/ui/Button"
 
 // ----------------------------------------------------
 // Animated Counter Component
@@ -270,7 +273,8 @@ function UserProfile() {
     <div className="min-h-screen bg-[#faf7f0] text-gray-800 transition-colors duration-200">
       <Navbar />
 
-      <main className="max-w-[1400px] mx-auto px-6 md:px-20 py-12 space-y-12">
+      <main className="py-12 space-y-12">
+        <WideContainer>
         
         {/* Instagram + GitHub Style Profile Header */}
         <section className="bg-white border border-[#e5ddc8] rounded-3xl p-6 md:p-8 shadow-sm flex flex-col md:flex-row gap-8 items-center md:items-start relative">
@@ -653,6 +657,7 @@ function UserProfile() {
           </div>
         </section>
 
+        </WideContainer>
       </main>
 
       {/* Read Story Modal */}

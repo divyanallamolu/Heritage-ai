@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 function Footer() {
   return (
     <footer className="border-t border-[#e5ddc8] bg-white py-16 lg:py-20">
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-8 px-6 md:grid-cols-4 lg:px-8">
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-8 px-6 md:px-10 lg:px-16 md:grid-cols-4">
         <div className="space-y-4 md:col-span-2">
           <Link to="/" className="text-xl font-black tracking-tight text-[#2f5233]">
             Heritage<span className="text-[#d4af37]">AI</span>

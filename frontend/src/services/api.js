@@ -28,6 +28,12 @@ async function parseErrorMessage(response, fallbackMessage) {
   return fallbackMessage;
 }
 
+// Handle 401 errors by clearing token and redirecting to login
+function handleAuthError() {
+  localStorage.removeItem("token");
+  window.location.href = "/login";
+}
+
 export async function sendChatMessage(message) {
   const response = await fetch(`${API_URL}/chat`, {
     method: "POST",
@@ -91,6 +97,11 @@ export async function fetchCurrentUser(token) {
     },
   });
 
+  if (response.status === 401) {
+    handleAuthError();
+    throw new Error("Unauthorized");
+  }
+
   if (!response.ok) {
     const message = await parseErrorMessage(response, "Failed to fetch current user.");
     throw new Error(message);
@@ -108,12 +119,20 @@ export async function testBackend() {
   return response.json();
 }
 
-export async function saveInterview(interviewData) {
+export async function saveInterview(interviewData, token) {
   const response = await fetch(`${API_URL}/interviews`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(interviewData),
   });
+
+  if (response.status === 401) {
+    handleAuthError();
+    throw new Error("Unauthorized");
+  }
 
   if (!response.ok) {
     throw new Error("Failed to save interview.");
@@ -143,11 +162,17 @@ export async function getAllInterviews() {
 }
 
 export async function getMyInterviews(token) {
-  const response = await fetch(`${API_URL}/interviews/me`, {
+  const response = await fetch(`${API_URL}/interviews`, {
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   });
+
+  if (response.status === 401) {
+    handleAuthError();
+    throw new Error("Unauthorized");
+  }
 
   if (!response.ok) {
     throw new Error("Failed to fetch your interviews.");
@@ -156,8 +181,18 @@ export async function getMyInterviews(token) {
   return response.json();
 }
 
-export async function getInterviewById(id) {
-  const response = await fetch(`${API_URL}/interviews/${id}`);
+export async function getInterviewById(id, token) {
+  const response = await fetch(`${API_URL}/interviews/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response.status === 401) {
+    handleAuthError();
+    throw new Error("Unauthorized");
+  }
 
   if (!response.ok) {
     throw new Error("Failed to fetch interview.");
@@ -166,10 +201,19 @@ export async function getInterviewById(id) {
   return response.json();
 }
 
-export async function deleteInterview(id) {
+export async function deleteInterview(id, token) {
   const response = await fetch(`${API_URL}/interviews/${id}`, {
     method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
   });
+
+  if (response.status === 401) {
+    handleAuthError();
+    throw new Error("Unauthorized");
+  }
 
   if (!response.ok) {
     throw new Error("Failed to delete interview.");

@@ -26,8 +26,10 @@ import Navbar from "../components/Navbar"
 import IndiaMap from "../components/IndiaMap"
 import Footer from "../components/Footer"
 import { getInitials, formatDate, getAvatarGradient } from "../utils/helpers"
-
 import { CENTRAL_STORIES } from "../data/stories"
+import { WideContainer } from "../components/ui/Container"
+import { CompactCard } from "../components/ui/Card"
+import { Button } from "../components/ui/Button"
 
 // ----------------------------------------------------
 // Mock Constants (Cleanly isolated for future replacement)
@@ -196,19 +198,20 @@ function HeritageAnalytics() {
     <div className="min-h-screen bg-[#faf7f0] text-gray-800">
       <Navbar />
 
-      <header className="max-w-[1400px] mx-auto px-6 md:px-20 pt-12 pb-4">
-        <div className="border-b border-[#e5ddc8] pb-6 flex flex-col md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 className="text-3xl font-extrabold text-[#2f5233] tracking-tight flex items-center gap-2">
-              Heritage Analytics
-              <span className="text-xs bg-[#d4af37]/20 text-[#8a5233] border border-[#d4af37]/30 px-2.5 py-0.5 rounded font-mono font-bold uppercase">
-                Active
-              </span>
-            </h1>
-            <p className="mt-1.5 text-xs md:text-sm text-gray-600 font-light">
-              Real-time preservation tracking, state counts, and regional distribution insights.
-            </p>
-          </div>
+      <header className="pt-12 pb-4">
+        <WideContainer>
+          <div className="border-b border-[#e5ddc8] pb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold text-[#2f5233] tracking-tight flex items-center gap-2">
+                Heritage Analytics
+                <span className="text-xs bg-[#d4af37]/20 text-[#8a5233] border border-[#d4af37]/30 px-2.5 py-0.5 rounded font-mono font-bold uppercase">
+                  Active
+                </span>
+              </h1>
+              <p className="mt-1.5 text-base text-gray-600 font-light leading-relaxed">
+                Real-time preservation tracking, state counts, and regional distribution insights.
+              </p>
+            </div>
           {selectedState && (
             <div className="mt-4 md:mt-0 bg-[#d4af37]/10 border border-[#d4af37]/30 px-4 py-2 rounded-xl flex items-center gap-3 text-xs">
               <span className="text-[#8a5233] font-semibold">Filtering by: 📍 {selectedState}</span>
@@ -220,12 +223,14 @@ function HeritageAnalytics() {
               </button>
             </div>
           )}
-        </div>
+          </div>
+        </WideContainer>
       </header>
 
       {/* 📊 Statistic Cards Grid */}
-      <section className="max-w-[1400px] mx-auto px-6 md:px-20 py-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+      <section className="py-4">
+        <WideContainer>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
           {[
             { label: "Total Stories", val: totalStories, icon: BookOpen, accent: "text-[#2f5233] bg-emerald-50" },
             { label: "Elders Preserved", val: uniqueElders, icon: User, accent: "text-amber-700 bg-amber-50" },
@@ -256,10 +261,12 @@ function HeritageAnalytics() {
             </div>
           ))}
         </div>
+        </WideContainer>
       </section>
 
       {/* Main Grid Content (Balanced Dashboard Grid) */}
-      <main className="max-w-[1400px] mx-auto px-6 md:px-20 py-6 space-y-6">
+      <main className="py-6 space-y-6">
+        <WideContainer>
         
         {/* Row 1: Map (2 cols) | Trending Stories (1 col) | Languages (1 col) */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-stretch">
@@ -503,7 +510,7 @@ function HeritageAnalytics() {
           </div>
 
         </div>
-
+        </WideContainer>
       </main>
 
       {/* Read Story Modal */}
@@ -589,7 +596,7 @@ function HeritageAnalytics() {
                 </div>
                 <button
                   onClick={() => setSelectedInterview(null)}
-                  className="bg-[#2f5233] hover:bg-[#203923] text-white py-2 px-6 rounded-lg font-bold shadow transition"
+                  className="rounded-xl h-12 px-6 font-semibold bg-[#2f5233] hover:bg-[#203923] text-white border border-[#d4af37]/20 shadow hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-300"
                 >
                   Close
                 </button>

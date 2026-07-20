@@ -4,10 +4,12 @@ import { Mic, Square, Sparkles, Save } from "lucide-react"
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import { saveInterview } from "../services/api"
+import { useAuth } from "../context/AuthContext"
 
 const languages = ["English", "Telugu", "Hindi", "Tamil", "Kannada"]
 
 function InterviewPage() {
+  const { token } = useAuth()
   const [isRecording, setIsRecording] = useState(false)
   const [isTranscribing, setIsTranscribing] = useState(false)
   const [language, setLanguage] = useState("English")
@@ -178,7 +180,7 @@ function InterviewPage() {
         language,
         transcript,
         ai_summary: summary || null,
-      })
+      }, token)
       setSaveStatus("saved")
     } catch (err) {
       setSaveStatus("error")

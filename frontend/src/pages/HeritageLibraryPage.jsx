@@ -21,6 +21,9 @@ import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import { getInitials, formatDate, getAvatarGradient, truncate } from "../utils/helpers"
 import { CENTRAL_STORIES } from "../data/stories"
+import { WideContainer } from "../components/ui/Container"
+import { CompactCard } from "../components/ui/Card"
+import { Button, SmallButton } from "../components/ui/Button"
 
 function enrichInterviewData(interview, index) {
   const seed = (interview.id || index) * 17;
@@ -167,44 +170,47 @@ function HeritageLibraryPage() {
         <Navbar />
 
         {/* Page Header */}
-        <header className="max-w-[1400px] mx-auto px-6 md:px-20 pt-16 pb-6 text-center md:text-left">
-          <div className="border-b border-[#e5ddc8] pb-8 md:flex md:items-center md:justify-between">
-            <div>
-              <motion.h1
-                initial={{ opacity: 0, y: -15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="text-4xl md:text-5xl font-black text-[#2f5233] tracking-tight"
-              >
-                Heritage Library
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.1 }}
-                className="mt-2 text-sm md:text-base text-gray-600 font-light max-w-2xl"
-              >
-                Browse through oral recordings, histories, and traditions preserved by elders across generations.
-              </motion.p>
+        <header className="pt-16 pb-6">
+          <WideContainer>
+            <div className="border-b border-[#e5ddc8] pb-8 md:flex md:items-center md:justify-between">
+              <div>
+                <motion.h1
+                  initial={{ opacity: 0, y: -15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="text-4xl md:text-5xl font-bold text-[#2f5233] tracking-tight"
+                >
+                  Heritage Library
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.1 }}
+                  className="mt-2 text-base text-gray-600 font-light max-w-2xl leading-relaxed"
+                >
+                  Browse through oral recordings, histories, and traditions preserved by elders across generations.
+                </motion.p>
+              </div>
+              <div className="mt-6 md:mt-0 flex gap-4 justify-center">
+                <a
+                  href="/interview"
+                  className="rounded-xl h-12 px-6 font-semibold bg-[#2f5233] hover:bg-[#203923] text-white border border-[#d4af37]/20 shadow hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center gap-1.5"
+                >
+                  <Plus size={14} className="text-[#dfb15b]" /> Record Interview
+                </a>
+              </div>
             </div>
-            <div className="mt-6 md:mt-0 flex gap-4 justify-center">
-              <a
-                href="/interview"
-                className="bg-[#2f5233] hover:bg-[#203923] text-white py-2.5 px-6 rounded-lg text-xs font-bold shadow transition flex items-center gap-1.5"
-              >
-                <Plus size={14} className="text-[#dfb15b]" /> Record Interview
-              </a>
-            </div>
-          </div>
+          </WideContainer>
         </header>
 
         {/* Recently Added Carousel Section */}
-        <section className="max-w-[1400px] mx-auto px-6 md:px-20 py-6 border-b border-[#e5ddc8]/40 pb-10">
-          <h3 className="text-sm font-bold text-[#2f5233] mb-4 uppercase tracking-wider flex items-center gap-2">
-            <Clock size={16} className="text-[#8a9a5b]" />
-            <span>Recently Preserved Stories</span>
-          </h3>
-          <div className="flex gap-6 overflow-x-auto pb-4 pt-2 scrollbar-none">
+        <section className="py-6 border-b border-[#e5ddc8]/40 pb-10">
+          <WideContainer>
+            <h3 className="text-sm font-bold text-[#2f5233] mb-4 uppercase tracking-wider flex items-center gap-2">
+              <Clock size={16} className="text-[#8a9a5b]" />
+              <span>Recently Preserved Stories</span>
+            </h3>
+            <div className="flex gap-6 overflow-x-auto pb-4 pt-2 scrollbar-none">
             {recentlyAddedStories.map((story, index) => (
               <motion.div
                 key={story.id || index}
@@ -235,12 +241,14 @@ function HeritageLibraryPage() {
                 </div>
               </motion.div>
             ))}
-          </div>
+            </div>
+          </WideContainer>
         </section>
 
         {/* Search and Filters Section */}
-        <section className="max-w-[1400px] mx-auto px-6 md:px-20 py-8">
-          <div className="flex flex-col gap-5 bg-white border border-[#e5ddc8]/50 p-6 rounded-2xl shadow-sm">
+        <section className="py-8">
+          <WideContainer>
+            <div className="flex flex-col gap-5 bg-white border border-[#e5ddc8]/50 p-6 rounded-3xl shadow-sm">
             <div className="flex flex-col md:flex-row gap-4 items-center">
               <div className="relative w-full md:flex-1">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
@@ -367,14 +375,15 @@ function HeritageLibraryPage() {
               )}
             </div>
           )}
+          </WideContainer>
         </section>
 
         {/* Spacious Complete Story Cards Grid */}
-        <section className="max-w-[1400px] mx-auto px-6 md:px-20 pb-24">
-          
+        <section className="pb-24">
+          <WideContainer>
           {/* Skeleton Loaders */}
           {isLoading && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="bg-white rounded-2xl p-6 border border-[#e5ddc8] animate-pulse h-48 flex flex-col justify-between">
                   <div className="flex gap-4">
@@ -420,7 +429,7 @@ function HeritageLibraryPage() {
           {/* Cards Grid */}
           {!isLoading && !error && sortedInterviews.length > 0 && (
             <div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {sortedInterviews.slice(0, visibleCount).map((story, index) => {
                   const isSaved = savedIds.includes(story.id);
                   return (
@@ -491,7 +500,7 @@ function HeritageLibraryPage() {
                 <div className="flex justify-center mt-12">
                   <button
                     onClick={() => setVisibleCount((prev) => prev + 9)}
-                    className="bg-[#2f5233] hover:bg-[#203923] text-white py-3 px-8 rounded-lg text-xs font-bold shadow-md transition-all active:scale-[0.98]"
+                    className="rounded-xl h-12 px-6 font-semibold bg-[#2f5233] hover:bg-[#203923] text-white border border-[#d4af37]/20 shadow hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-300"
                   >
                     Load More Stories
                   </button>
@@ -499,7 +508,7 @@ function HeritageLibraryPage() {
               )}
             </div>
           )}
-
+          </WideContainer>
         </section>
       </div>
 

@@ -71,7 +71,7 @@ function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 bg-[#faf7f0]/95 backdrop-blur-md border-b border-[#e5ddc8] shadow-sm">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 py-4 flex items-center justify-between">
         
         {/* Brand Logo */}
         <Link to="/" className="text-2xl font-black text-[#2f5233] tracking-tight">
