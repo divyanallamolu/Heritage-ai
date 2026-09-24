@@ -4,7 +4,8 @@ from app.schemas import InterviewCreate
 
 
 def create_interview(db: Session, interview: InterviewCreate, user_id: int) -> Interview:
-    db_interview = Interview(**interview.dict(), user_id=user_id)
+    data = interview.model_dump() if hasattr(interview, "model_dump") else interview.dict()
+    db_interview = Interview(**data, user_id=user_id)
     db.add(db_interview)
     db.commit()
     db.refresh(db_interview)

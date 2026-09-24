@@ -34,11 +34,10 @@ Transcript:
 
     try:
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.6-flash",
             contents=prompt,
         )
-
         return response.text or "No summary generated."
-
-    except ClientError:
-        return "oh noo we are out of gemini keys..."
+    except ClientError as e:
+        print(f"Gemini API error: {e}")
+        return "Failed to generate summary with Gemini."

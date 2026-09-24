@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Heritage Assistant — HeritageAI</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+
+  <header id="main-header"></header>
+
+  <!-- Banner -->
+  <section style="background-color: #ffffff; border-bottom: 1px solid var(--border-color); padding: 2.5rem 0; text-align: center;">
+    <div class="container">
+      <h1 class="font-serif" style="font-size: 2.5rem; color: var(--heritage-green-600); margin-bottom: 0.25rem;">✨ AI Cultural Heritage Assistant</h1>
+      <p style="color: #6b7280; max-width: 32rem; margin: 0 auto;">Ask questions about India's cultural traditions, elders, recipes, festivals, crafts, languages, and oral history.</p>
+    </div>
+  </section>
+
+  <main style="flex: 1; display: flex; flex-direction: column; padding: 2rem 0;">
+    <div class="container flex-1 flex flex-col" style="max-width: 52rem;">
+      
+      <!-- Messages Thread Area -->
+      <div id="chat-messages" class="card flex-1" style="min-height: 380px; max-height: 520px; overflow-y: auto; padding: 1.5rem; margin-bottom: 1.5rem;">
+        <!-- Injected via chat.js -->
+      </div>
+
+      <!-- Suggested Prompts Grid -->
+      <div id="suggestions-container" style="margin-bottom: 1.5rem;">
+        <h4 style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #9ca3af; margin-bottom: 0.75rem;">💡 Suggested Prompts</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          <button class="prompt-suggestion-btn card card-hover" data-query="Tell me about traditional farming and underground grain storage pits (Hagevu)." style="text-align: left; padding: 0.85rem; font-size: 0.8rem; font-weight: 600; color: var(--heritage-green-600); cursor: pointer; border: 1px solid var(--border-color);">
+            🌾 Traditional Farming & Silos
+          </button>
+          <button class="prompt-suggestion-btn card card-hover" data-query="Tell me about traditional folk medicine remedies from the Nallamala forest." style="text-align: left; padding: 0.85rem; font-size: 0.8rem; font-weight: 600; color: var(--heritage-green-600); cursor: pointer; border: 1px solid var(--border-color);">
+            🏺 Folk Medicine & Remedies
+          </button>
+          <button class="prompt-suggestion-btn card card-hover" data-query="What are the traditional festivals of Andhra Pradesh and Telangana?" style="text-align: left; padding: 0.85rem; font-size: 0.8rem; font-weight: 600; color: var(--heritage-green-600); cursor: pointer; border: 1px solid var(--border-color);">
+            🎉 Festivals & Folk Lore
+          </button>
+        </div>
+      </div>
+
+      <!-- Input Bar -->
+      <div class="card" style="padding: 1rem;">
+        <div class="flex items-center gap-3">
+          <textarea id="chat-input" class="form-textarea" rows="1" placeholder="Ask about traditional farming, folk recipes, or local crafts..." style="resize: none; max-height: 8rem; min-height: 2.75rem;"></textarea>
+          <button id="send-btn" class="btn btn-primary" style="padding: 0.75rem 1.25rem;">Send</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer id="main-footer"></footer>
+
+  <script type="module" src="js/common.js"></script>
+  <script type="module" src="js/chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regional Analytics — HeritageAI</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+
+  <header id="main-header"></header>
+
+  <!-- Banner -->
+  <section style="background-color: #ffffff; border-bottom: 1px solid var(--border-color); padding: 3rem 0;">
+    <div class="container">
+      <h1 class="font-serif" style="font-size: 2.5rem; color: var(--heritage-green-600); margin-bottom: 0.25rem;">Regional Preservation Analytics</h1>
+      <p style="color: #6b7280;">Interactive state-by-state mapping and cultural preservation metrics across India.</p>
+    </div>
+  </section>
+
+  <main style="flex: 1; padding: 2.5rem 0;">
+    <div class="container">
+      
+      <!-- Metrics Counters -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4" style="margin-bottom: 2rem;">
+        <div class="card" style="text-align: center; padding: 1.25rem;">
+          <p id="analytics-total-stories" class="font-serif" style="font-size: 2rem; font-weight: 900; color: var(--heritage-green-600);">28</p>
+          <p style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #9ca3af;">Stories Preserved</p>
+        </div>
+        <div class="card" style="text-align: center; padding: 1.25rem;">
+          <p id="analytics-unique-elders" class="font-serif" style="font-size: 2rem; font-weight: 900; color: var(--heritage-green-600);">28</p>
+          <p style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #9ca3af;">Elders Recorded</p>
+        </div>
+        <div class="card" style="text-align: center; padding: 1.25rem;">
+          <p id="analytics-languages-count" class="font-serif" style="font-size: 2rem; font-weight: 900; color: var(--heritage-green-600);">18</p>
+          <p style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #9ca3af;">Languages</p>
+        </div>
+        <div class="card" style="text-align: center; padding: 1.25rem;">
+          <p id="analytics-total-views" class="font-serif" style="font-size: 2rem; font-weight: 900; color: var(--gold-600);">21,450</p>
+          <p style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #9ca3af;">Total Views</p>
+        </div>
+        <div class="card" style="text-align: center; padding: 1.25rem;">
+          <p id="analytics-total-saves" class="font-serif" style="font-size: 2rem; font-weight: 900; color: var(--gold-600);">5,120</p>
+          <p style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #9ca3af;">Saved Bookmarks</p>
+        </div>
+      </div>
+
+      <!-- Main Section: India Map + Breakdown -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left: Interactive SVG Map -->
+        <div class="lg:col-span-7 card">
+          <div class="flex items-center justify-between" style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+            <h3 class="font-serif" style="font-size: 1.25rem; color: var(--heritage-green-600); margin: 0;">Interactive India Map</h3>
+            <span id="analytics-state-label" style="font-size: 0.8rem; font-weight: 700; color: var(--gold-700);">Showing All 28 States & UTs</span>
+          </div>
+
+          <div id="india-map-container" style="position: relative; width: 100%; min-height: 480px; display: flex; align-items: center; justify-content: center;">
+            <!-- SVG Map rendered via analytics.js -->
+          </div>
+        </div>
+
+        <!-- Right: Category Breakdown & Popular Stories -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+          <div class="card">
+            <h3 class="font-serif" style="font-size: 1.25rem; color: var(--heritage-green-600); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+              Category Distribution
+            </h3>
+            <div id="category-breakdown-list">
+              <!-- Rendered via analytics.js -->
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="font-serif" style="font-size: 1.25rem; color: var(--heritage-green-600); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+              Top Popular Stories
+            </h3>
+            <div id="popular-stories-list">
+              <!-- Rendered via analytics.js -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer id="main-footer"></footer>
+
+  <script type="module" src="js/common.js"></script>
+  <script type="module" src="js/analytics.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heritage Library — HeritageAI</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+
+  <header id="main-header"></header>
+
+  <!-- Page Banner -->
+  <section style="background-color: #ffffff; border-bottom: 1px solid var(--border-color); padding: 3rem 0;">
+    <div class="container flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <h1 class="font-serif" style="font-size: 2.5rem; color: var(--heritage-green-600); margin-bottom: 0.25rem;">Heritage Library</h1>
+        <p style="color: #6b7280;">Browse through oral recordings, histories, and traditions preserved by elders across generations.</p>
+      </div>
+      <div>
+        <a href="interview.html" class="btn btn-primary">+ Record Interview</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Search & Filter & Grid Section -->
+  <main style="flex: 1; padding: 2.5rem 0;">
+    <div class="container">
+      
+      <!-- Filters Toolbar -->
+      <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label class="form-label">Search Keywords</label>
+            <input type="text" id="search-input" class="form-input" placeholder="Search elder, state, language, craft...">
+          </div>
+          <div>
+            <label class="form-label">State</label>
+            <select id="state-filter" class="form-select">
+              <option value="">All States</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Category</label>
+            <select id="category-filter" class="form-select">
+              <option value="">All Categories</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Language</label>
+            <select id="language-filter" class="form-select">
+              <option value="">All Languages</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between" style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 0.75rem;">
+          <span id="stories-count" style="font-size: 0.8rem; font-weight: 700; color: #6b7280;">Loading stories...</span>
+          <div class="flex items-center gap-3">
+            <select id="sort-filter" class="form-select" style="width: auto; padding: 0.4rem 0.75rem; font-size: 0.8rem;">
+              <option value="recent">Sort by Most Recent</option>
+              <option value="views">Sort by Most Viewed</option>
+              <option value="saves">Sort by Most Saved</option>
+              <option value="name">Sort by Elder Name</option>
+            </select>
+            <button id="reset-filters-btn" class="btn btn-outline" style="padding: 0.4rem 0.75rem; font-size: 0.75rem;">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Story Cards Grid -->
+      <div id="stories-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Dynamic Cards rendered via library.js -->
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Story Detail Modal Popup -->
+  <div id="story-modal-overlay" class="modal-overlay">
+    <div id="story-modal-content" class="modal-container">
+      <!-- Injected dynamically via library.js -->
+    </div>
+  </div>
+
+  <footer id="main-footer"></footer>
+
+  <script type="module" src="js/common.js"></script>
+  <script type="module" src="js/library.js"></script>
+</body>
+</html>

@@ -1,13 +1,184 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HeritageAI — Preserving Oral History with AI</title>
+  <meta name="description" content="HeritageAI transforms spoken memories into a searchable, interactive digital archive. Document traditions, dialects, and recipes before they disappear.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <!-- Dynamic Header Container -->
+  <header id="main-header"></header>
+
+  <main>
+    <!-- Hero Section -->
+    <section style="background: linear-gradient(to bottom, #faf7f0, rgba(240, 234, 217, 0.4)); border-bottom: 1px solid var(--border-color); padding: 4rem 0;">
+      <div class="container grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Column -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem; background-color: rgba(47, 82, 51, 0.08); border: 1px solid rgba(47, 82, 51, 0.2); padding: 0.35rem 0.85rem; border-radius: var(--radius-md); font-size: 0.7rem; font-weight: 800; color: var(--heritage-green-600); text-transform: uppercase; letter-spacing: 0.1em; width: fit-content;">
+            ✨ Preserving Oral History with AI
+          </div>
+
+          <h1 class="font-serif" style="font-size: 3.25rem; font-weight: 900; line-height: 1.1; color: var(--heritage-green-600); letter-spacing: -0.03em;">
+            Every Elder has a Story.<br>
+            Keep Their <span style="color: var(--gold-600); position: relative; display: inline-block;">Wisdom</span> Alive.
+          </h1>
+
+          <p style="font-size: 0.95rem; color: #4b5563; line-height: 1.7; max-width: 32rem;">
+            HeritageAI transforms spoken memories into a searchable, interactive digital archive. Document traditions, dialects, and recipes before they disappear.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4" style="padding-top: 0.5rem;">
+            <a href="interview.html" class="btn btn-primary" style="padding: 1rem 1.75rem;">
+              🎙️ Start Recording
+            </a>
+            <a href="library.html" class="btn btn-outline" style="padding: 1rem 1.75rem;">
+              Browse Library
+            </a>
+          </div>
+
+          <!-- Trust Indicators -->
+          <div class="grid grid-cols-3 gap-4" style="padding-top: 1.5rem;">
+            <div style="background-color: rgba(255, 255, 255, 0.7); border: 1px solid var(--border-color); padding: 1rem; border-radius: var(--radius-xl);">
+              <p id="stat-stories-count" class="font-serif" style="font-size: 1.5rem; font-weight: 900; color: var(--heritage-green-600);">28+</p>
+              <p style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #9ca3af;">Stories Preserved</p>
+            </div>
+            <div style="background-color: rgba(255, 255, 255, 0.7); border: 1px solid var(--border-color); padding: 1rem; border-radius: var(--radius-xl);">
+              <p id="stat-languages-count" class="font-serif" style="font-size: 1.5rem; font-weight: 900; color: var(--heritage-green-600);">18+</p>
+              <p style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #9ca3af;">Folk Languages</p>
+            </div>
+            <div style="background-color: rgba(255, 255, 255, 0.7); border: 1px solid var(--border-color); padding: 1rem; border-radius: var(--radius-xl);">
+              <p id="stat-states-count" class="font-serif" style="font-size: 1.5rem; font-weight: 900; color: var(--heritage-green-600);">28+</p>
+              <p style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #9ca3af;">States Covered</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column Interactive Graphic Card -->
+        <div class="lg:col-span-7" style="position: relative; height: 500px; background-color: rgba(242, 237, 217, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-3xl); overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-xl);">
+          
+          <!-- Background Grid Lines -->
+          <div style="position: absolute; inset: 0; background-image: radial-gradient(circle at 2px 2px, rgba(47, 82, 51, 0.08) 1px, transparent 0); background-size: 24px 24px;"></div>
+
+          <!-- Main Floating Heritage Story Preview Card -->
+          <div class="animate-float" style="position: relative; z-index: 20; width: 90%; max-width: 380px; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--border-color); border-radius: var(--radius-2xl); padding: 1.5rem; box-shadow: var(--shadow-2xl); backdrop-filter: blur(8px);">
+            <div class="flex items-center gap-3">
+              <div id="preview-avatar" class="avatar-badge" style="width: 2.75rem; height: 2.75rem; font-size: 1rem;">LD</div>
+              <div style="flex: 1;">
+                <div class="flex justify-between items-center" style="font-size: 0.7rem; font-weight: 800; color: #9ca3af; text-transform: uppercase;">
+                  <span id="preview-state">📍 Andhra Pradesh</span>
+                  <span id="preview-category" class="badge badge-green">Handicrafts</span>
+                </div>
+                <h4 id="preview-elder-name" style="font-weight: 800; font-size: 0.95rem; color: #111827; margin-top: 0.2rem;">Lakshmi Devi • Age 82</h4>
+              </div>
+            </div>
+
+            <p id="preview-quote" style="font-size: 0.85rem; color: #6b7280; font-style: italic; margin-top: 1rem; line-height: 1.5; border-left: 2px solid var(--gold-600); padding-left: 0.75rem;">
+              "A single saree takes three weeks of devotion. When spinning, every thread carries the folklore of our ancestors..."
+            </p>
+
+            <!-- Audio Waveform Simulation -->
+            <div class="flex items-center gap-3" style="margin-top: 1.25rem;">
+              <span style="padding: 0.4rem; background-color: rgba(47, 82, 51, 0.1); border-radius: var(--radius-md); color: var(--heritage-green-600); font-size: 0.9rem;">🔊</span>
+              <div style="flex: 1; display: flex; gap: 3px; height: 16px; align-items: flex-end;">
+                <div class="animate-pulse-bar" style="width: 3px; background-color: #8a9a5b;"></div>
+                <div class="animate-pulse-bar" style="width: 3px; background-color: #8a9a5b; animation-delay: 0.2s;"></div>
+                <div class="animate-pulse-bar" style="width: 3px; background-color: #8a9a5b; animation-delay: 0.4s;"></div>
+                <div class="animate-pulse-bar" style="width: 3px; background-color: #8a9a5b; animation-delay: 0.1s;"></div>
+                <div class="animate-pulse-bar" style="width: 3px; background-color: #8a9a5b; animation-delay: 0.3s;"></div>
+                <div class="animate-pulse-bar" style="width: 3px; background-color: #8a9a5b; animation-delay: 0.5s;"></div>
+              </div>
+              <span style="font-size: 0.75rem; font-family: var(--font-mono); color: #9ca3af;">04:12</span>
+            </div>
+          </div>
+
+          <!-- Top-Right AI Processing Status Badge -->
+          <div style="position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(255, 255, 255, 0.9); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 0.85rem; font-size: 0.75rem; box-shadow: var(--shadow-lg); width: 12rem;">
+            <div class="flex items-center gap-1.5" style="color: var(--heritage-green-600); font-weight: 700;">
+              ✨ <span>Translation Engine</span>
+            </div>
+            <p style="font-size: 0.7rem; color: #6b7280; margin-top: 0.3rem;">🗣️ Dialect: <strong id="preview-dialect">Telugu</strong></p>
+            <p style="font-size: 0.65rem; color: var(--heritage-green-600); font-weight: 800; margin-top: 0.3rem;">● Deepgram Transcribing...</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Quick Actions Section -->
+    <section style="padding: 4rem 0; background-color: #faf9f5;">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: 3rem;">
+          <h2 class="font-serif" style="font-size: 2.25rem; color: var(--heritage-green-600); margin-bottom: 0.5rem;">Quick Actions</h2>
+          <p style="color: #6b7280;">Get started with preserving cultural heritage</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <a href="interview.html" class="card card-hover" style="text-align: center; text-decoration: none; color: inherit;">
+            <div style="width: 3.5rem; height: 3.5rem; border-radius: 50%; background-color: rgba(47, 82, 51, 0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; font-size: 1.5rem;">🎙️</div>
+            <h3 style="font-weight: 700; color: var(--heritage-green-600); margin-bottom: 0.3rem;">Record Interview</h3>
+            <p style="font-size: 0.85rem; color: #6b7280;">Record an elder's story using live voice.</p>
+          </a>
+
+          <a href="library.html" class="card card-hover" style="text-align: center; text-decoration: none; color: inherit;">
+            <div style="width: 3.5rem; height: 3.5rem; border-radius: 50%; background-color: rgba(47, 82, 51, 0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; font-size: 1.5rem;">📖</div>
+            <h3 style="font-weight: 700; color: var(--heritage-green-600); margin-bottom: 0.3rem;">Heritage Library</h3>
+            <p style="font-size: 0.85rem; color: #6b7280;">Explore preserved stories and cultural knowledge.</p>
+          </a>
+
+          <a href="chat.html" class="card card-hover" style="text-align: center; text-decoration: none; color: inherit;">
+            <div style="width: 3.5rem; height: 3.5rem; border-radius: 50%; background-color: rgba(47, 82, 51, 0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; font-size: 1.5rem;">💬</div>
+            <h3 style="font-weight: 700; color: var(--heritage-green-600); margin-bottom: 0.3rem;">Ask HeritageAI</h3>
+            <p style="font-size: 0.85rem; color: #6b7280;">Ask AI questions about cultural traditions.</p>
+          </a>
+
+          <a href="analytics.html" class="card card-hover" style="text-align: center; text-decoration: none; color: inherit;">
+            <div style="width: 3.5rem; height: 3.5rem; border-radius: 50%; background-color: rgba(47, 82, 51, 0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; font-size: 1.5rem;">📊</div>
+            <h3 style="font-weight: 700; color: var(--heritage-green-600); margin-bottom: 0.3rem;">View Analytics</h3>
+            <p style="font-size: 0.85rem; color: #6b7280;">Explore regional state map & preservation stats.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recently Preserved Stories -->
+    <section style="padding: 4rem 0; background-color: #ffffff; border-top: 1px solid var(--border-color);">
+      <div class="container">
+        <div class="flex items-center justify-between" style="margin-bottom: 2.5rem;">
+          <div>
+            <h2 class="font-serif" style="font-size: 2.25rem; color: var(--heritage-green-600); margin-bottom: 0.25rem;">Recently Preserved Stories</h2>
+            <p style="color: #6b7280;">Explore the latest additions to our cultural archive</p>
+          </div>
+          <a href="library.html" class="btn btn-outline">View All →</a>
+        </div>
+
+        <div id="recent-stories-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Dynamic Story Cards appended via home.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Cultural Message Banner -->
+    <section style="background-color: var(--heritage-green-600); color: #ffffff; padding: 5rem 0; text-align: center; position: relative; overflow: hidden;">
+      <div class="container" style="position: relative; z-index: 10; max-width: 48rem;">
+        <h2 class="font-serif" style="font-size: 2.75rem; margin-bottom: 1rem;">Some Stories Should Never Be Forgotten</h2>
+        <p style="font-size: 1.1rem; opacity: 0.9; line-height: 1.7;">
+          Every generation carries knowledge that cannot be found in books. HeritageAI helps preserve these memories so future generations can listen, learn, and remember.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Dynamic Footer Container -->
+  <footer id="main-footer"></footer>
+
+  <script type="module" src="js/common.js"></script>
+  <script type="module" src="js/home.js"></script>
+</body>
 </html>

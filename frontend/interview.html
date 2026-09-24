@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oral Interview — HeritageAI</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+
+  <header id="main-header"></header>
+
+  <main style="flex: 1; padding: 3rem 0;">
+    <div class="container">
+      <!-- Header -->
+      <div style="text-align: center; margin-bottom: 2.5rem;">
+        <h1 class="font-serif" style="font-size: 2.5rem; color: var(--heritage-green-600); margin-bottom: 0.25rem;">Record Elder Interview</h1>
+        <p style="color: #6b7280; max-width: 32rem; margin: 0 auto;">
+          Document oral traditions, local dialects, and family memories in real-time.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Panel: Elder Details & Voice Control -->
+        <div class="lg:col-span-5 card">
+          <h3 class="font-serif" style="font-size: 1.25rem; color: var(--heritage-green-600); margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+            1. Elder Details
+          </h3>
+
+          <div class="form-group">
+            <label class="form-label" for="elder-name">Elder Full Name *</label>
+            <input type="text" id="elder-name" class="form-input" placeholder="e.g. Lakshmi Devi" required>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label" for="age-input">Age</label>
+              <input type="number" id="age-input" class="form-input" placeholder="82">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="language-select">Spoken Language *</label>
+              <select id="language-select" class="form-select">
+                <option value="English">English</option>
+                <option value="Telugu" selected>Telugu</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Tamil">Tamil</option>
+                <option value="Kannada">Kannada</option>
+                <option value="Bengali">Bengali</option>
+                <option value="Marathi">Marathi</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label" for="village-input">Village / City</label>
+              <input type="text" id="village-input" class="form-input" placeholder="Dharmavaram">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="district-input">District</label>
+              <input type="text" id="district-input" class="form-input" placeholder="Anantapur">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="state-input">State</label>
+            <input type="text" id="state-input" class="form-input" placeholder="Andhra Pradesh">
+          </div>
+
+          <h3 class="font-serif" style="font-size: 1.25rem; color: var(--heritage-green-600); margin: 1.5rem 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+            2. Voice Recording (Deepgram STT)
+          </h3>
+
+          <div id="record-error" style="display: none; background-color: #fef2f2; border: 1px solid #fca5a5; color: #dc2626; padding: 0.75rem; border-radius: var(--radius-md); font-size: 0.8rem; margin-bottom: 1rem;"></div>
+
+          <div class="flex flex-col gap-3">
+            <button id="record-btn" class="btn btn-primary" style="padding: 1rem; width: 100%;">
+              🎙️ Start Live Voice Recording
+            </button>
+            <button id="stop-btn" class="btn btn-gold" style="padding: 1rem; width: 100%; display: none;">
+              ⏹️ Stop & Finalize Recording
+            </button>
+          </div>
+
+          <p id="record-status" style="font-size: 0.8rem; color: #6b7280; text-align: center; margin-top: 0.75rem;">
+            Click to activate microphone stream.
+          </p>
+        </div>
+
+        <!-- Right Panel: Transcript & Gemini Summary & Save -->
+        <div class="lg:col-span-7 flex flex-col gap-6">
+          
+          <div class="card">
+            <h3 class="font-serif" style="font-size: 1.25rem; color: var(--heritage-green-600); margin-bottom: 0.75rem;">
+              3. Spoken Transcript
+            </h3>
+            <textarea id="transcript-input" class="form-textarea" rows="7" placeholder="Live transcript from Deepgram will stream here... You can also type or edit transcript manually."></textarea>
+            
+            <div style="margin-top: 1rem;">
+              <button id="generate-summary-btn" class="btn btn-outline" style="width: 100%;">
+                ✨ Generate AI Summary (Gemini)
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="font-serif" style="font-size: 1.25rem; color: var(--heritage-green-600); margin-bottom: 0.75rem;">
+              4. AI Cultural Summary
+            </h3>
+            <div id="summary-error" style="display: none; background-color: #fef2f2; color: #dc2626; padding: 0.5rem; border-radius: var(--radius-md); font-size: 0.8rem; margin-bottom: 0.5rem;"></div>
+            <textarea id="summary-output" class="form-textarea" rows="4" placeholder="AI summary generated by Gemini will appear here..."></textarea>
+          </div>
+
+          <div class="card" style="text-align: center;">
+            <button id="save-interview-btn" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 0.85rem;">
+              💾 Preserve & Save Interview to SQLite Database
+            </button>
+            <p id="save-status" style="font-size: 0.8rem; margin-top: 0.5rem;"></p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer id="main-footer"></footer>
+
+  <script type="module" src="js/common.js"></script>
+  <script type="module" src="js/interview.js"></script>
+</body>
+</html>

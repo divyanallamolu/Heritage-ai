@@ -1,0 +1,218 @@
+/* HeritageAI Global Design System & Core Styles */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+:root {
+  /* Primary Colors - Heritage Green */
+  --heritage-green-50: #f0f7f4;
+  --heritage-green-100: #e0efe8;
+  --heritage-green-200: #c5e0d4;
+  --heritage-green-300: #9dcbb8;
+  --heritage-green-400: #6fb49c;
+  --heritage-green-500: #4a8c7a;
+  --heritage-green-600: #2f5233;
+  --heritage-green-700: #244028;
+  --heritage-green-800: #1a311d;
+  --heritage-green-900: #112214;
+
+  /* Secondary Colors - Warm Ivory/Cream */
+  --ivory-50: #fdfdfb;
+  --ivory-100: #faf9f5;
+  --ivory-200: #f5f3eb;
+  --ivory-300: #ebe7d9;
+  --ivory-400: #e0d9c5;
+  --ivory-500: #d4c9a8;
+
+  /* Accent Colors - Warm Ochre & Muted Gold */
+  --gold-300: #fbd99d;
+  --gold-400: #f8c06d;
+  --gold-500: #f4a342;
+  --gold-600: #d4af37;
+  --gold-700: #b8952e;
+  --gold-accent: #dfb15b;
+
+  /* Neutral Colors - Charcoal */
+  --charcoal-50: #f7f7f7;
+  --charcoal-100: #e5e5e5;
+  --charcoal-400: #737373;
+  --charcoal-600: #404040;
+  --charcoal-700: #262626;
+  --charcoal-800: #171717;
+  --charcoal-900: #0a0a0a;
+
+  /* Border & Surface Colors */
+  --border-color: #e5ddc8;
+  --border-light: rgba(229, 221, 200, 0.5);
+  --bg-main: #faf9f5;
+  --bg-card: #ffffff;
+
+  /* Typography Scale */
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Spacing Scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Base Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-main);
+  color: var(--charcoal-800);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Typography Utility Classes */
+.font-serif { font-family: var(--font-serif); }
+.font-sans { font-family: var(--font-sans); }
+.font-mono { font-family: var(--font-mono); }
+
+.text-heritage-green { color: var(--heritage-green-600); }
+.text-gold { color: var(--gold-600); }
+.text-gold-accent { color: var(--gold-accent); }
+.text-gray-400 { color: #9ca3af; }
+.text-gray-500 { color: #6b7280; }
+.text-gray-600 { color: #4b5563; }
+.text-gray-700 { color: #374151; }
+.text-gray-800 { color: #1f2937; }
+.text-gray-900 { color: #111827; }
+.text-white { color: #ffffff; }
+
+.bg-heritage-green { background-color: var(--heritage-green-600); }
+.bg-ivory { background-color: var(--ivory-100); }
+.bg-gold { background-color: var(--gold-600); }
+.bg-white { background-color: #ffffff; }
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Layout Utilities */
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.items-end { align-items: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+.flex-1 { flex: 1 1 0%; }
+.shrink-0 { flex-shrink: 0; }
+.flex-wrap { flex-wrap: wrap; }
+
+.grid { display: grid; }
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
+.gap-12 { gap: 3rem; }
+
+/* Responsive Grids */
+@media (min-width: 640px) {
+  .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sm\:flex-row { flex-direction: row; }
+}
+@media (min-width: 768px) {
+  .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .md\:flex { display: flex; }
+  .md\:hidden { display: none !important; }
+}
+@media (min-width: 1024px) {
+  .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .lg\:col-span-5 { grid-column: span 5 / span 5; }
+  .lg\:col-span-6 { grid-column: span 6 / span 6; }
+  .lg\:col-span-7 { grid-column: span 7 / span 7; }
+}
+
+/* Animations */
+@keyframes floatAnimation {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+.animate-float {
+  animation: floatAnimation 4.5s ease-in-out infinite;
+}
+
+@keyframes pulseBar {
+  0%, 100% { height: 25%; }
+  50% { height: 95%; }
+}
+.animate-pulse-bar {
+  animation: pulseBar 1.2s ease-in-out infinite alternate;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ivory-200);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold-400);
+  border-radius: var(--radius-md);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-500);
+}

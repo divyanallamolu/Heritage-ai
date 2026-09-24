@@ -198,7 +198,7 @@ def generate_chat_response(db: Session, message: str) -> str:
     """
 
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model="gemini-3.6-flash",
         contents=prompt,
     )
 
