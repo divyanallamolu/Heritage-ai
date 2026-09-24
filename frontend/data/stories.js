@@ -21,7 +21,7 @@ export const CENTRAL_STORIES = [
     saves: 342,
     viewsToday: 45,
     created_at: "2026-07-15T10:00:00Z"
-
+  },
   {
     id: "story-tg",
     elder_name: "Thatha Venkataswamy",
