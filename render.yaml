@@ -1,0 +1,5 @@
+services:
+  - type: static
+    name: heritage-ai
+    buildCommand: echo "No build required"
+    staticPublishPath: frontend
