@@ -3,9 +3,11 @@
  * All communication with backend endpoints goes through this file.
  */
 
-const API_BASE_URL = (window.location.origin && window.location.protocol.startsWith("http"))
-  ? window.location.origin
-  : `${window.location.protocol === "file:" ? "http:" : window.location.protocol}//${window.location.hostname || "localhost"}:5500`;
+const API_BASE_URL = window.HERITAGE_API_BASE || localStorage.getItem("heritageai_api_url") || (
+  (window.location.origin && window.location.protocol.startsWith("http"))
+    ? window.location.origin
+    : `${window.location.protocol === "file:" ? "http:" : window.location.protocol}//${window.location.hostname || "localhost"}:5500`
+);
 
 /**
  * Generic fetch wrapper with automatic Authorization header injection
@@ -32,6 +34,10 @@ async function apiRequest(endpoint, options = {}) {
   if (!response.ok) {
     const errorMsg = data?.detail || `API request failed with status ${response.status}`;
     throw new Error(errorMsg);
+  }
+
+  if (data === null || typeof data !== "object") {
+    throw new Error("Invalid API response received from server.");
   }
 
   return data;
