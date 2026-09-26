@@ -43,7 +43,7 @@ async def websocket_voice_endpoint(websocket: WebSocket):
     Flow: Browser audio chunk -> Deepgram STT -> Groq Voice AI -> ElevenLabs TTS -> Audio stream to Browser.
     """
     await websocket.accept()
-    print("🟢 Browser WebSocket connected for Voice Session")
+    print("[WebSocket] Browser WebSocket connected for Voice Session")
 
     try:
         while True:
@@ -55,24 +55,25 @@ async def websocket_voice_endpoint(websocket: WebSocket):
                 # Transcribe using Deepgram
                 try:
                     transcript = await transcribe_audio_bytes(audio_bytes)
+                    if transcript:
+                        # 1. Send live transcript back to frontend
+                        await websocket.send_json({"type": "transcript", "text": transcript})
+
+                        # 2. Get AI response from Groq
+                        ai_response = await get_groq_response_async(transcript)
+                        await websocket.send_json({"type": "assistant", "text": ai_response})
+
+                        # 3. Stream ElevenLabs TTS audio chunks to browser
+                        await websocket.send_json({"type": "audio_start"})
+                        for chunk in iter_speech_chunks(ai_response):
+                            chunk_b64 = base64.b64encode(chunk).decode("utf-8")
+                            await websocket.send_json({"type": "audio_chunk", "data": chunk_b64})
+                        await websocket.send_json({"type": "audio_end"})
+                    else:
+                        await websocket.send_json({"type": "error", "text": "Transcription failed. Please check your microphone or API key."})
                 except Exception as e:
-                    print(f"⚠️ STT transcription warning: {e}")
-                    transcript = ""
-
-                if transcript:
-                    # 1. Send live transcript back to frontend
-                    await websocket.send_json({"type": "transcript", "text": transcript})
-
-                    # 2. Get AI response from Groq
-                    ai_response = await get_groq_response_async(transcript)
-                    await websocket.send_json({"type": "assistant", "text": ai_response})
-
-                    # 3. Stream ElevenLabs TTS audio chunks to browser
-                    await websocket.send_json({"type": "audio_start"})
-                    for chunk in iter_speech_chunks(ai_response):
-                        chunk_b64 = base64.b64encode(chunk).decode("utf-8")
-                        await websocket.send_json({"type": "audio_chunk", "data": chunk_b64})
-                    await websocket.send_json({"type": "audio_end"})
+                    print(f"[WebSocket] STT transcription error: {e}")
+                    await websocket.send_json({"type": "error", "text": "Transcription failed. Please check your microphone or API key."})
 
             elif "text" in message and message["text"]:
                 try:
@@ -86,23 +87,24 @@ async def websocket_voice_endpoint(websocket: WebSocket):
                             raw_bytes = base64.b64decode(b64_data)
                             try:
                                 transcript = await transcribe_audio_bytes(raw_bytes, language=language)
+                                if transcript:
+                                    await websocket.send_json({"type": "transcript", "text": transcript})
+                                    
+                                    # If conversational voice response requested
+                                    if payload.get("generate_response", False):
+                                        ai_response = await get_groq_response_async(transcript)
+                                        await websocket.send_json({"type": "assistant", "text": ai_response})
+
+                                        await websocket.send_json({"type": "audio_start"})
+                                        for chunk in iter_speech_chunks(ai_response):
+                                            chunk_b64 = base64.b64encode(chunk).decode("utf-8")
+                                            await websocket.send_json({"type": "audio_chunk", "data": chunk_b64})
+                                        await websocket.send_json({"type": "audio_end"})
+                                else:
+                                    await websocket.send_json({"type": "error", "text": "Transcription failed. Please check your microphone or API key."})
                             except Exception as e:
-                                print(f"⚠️ STT transcription warning: {e}")
-                                transcript = ""
-
-                            if transcript:
-                                await websocket.send_json({"type": "transcript", "text": transcript})
-                                
-                                # If conversational voice response requested
-                                if payload.get("generate_response", False):
-                                    ai_response = await get_groq_response_async(transcript)
-                                    await websocket.send_json({"type": "assistant", "text": ai_response})
-
-                                    await websocket.send_json({"type": "audio_start"})
-                                    for chunk in iter_speech_chunks(ai_response):
-                                        chunk_b64 = base64.b64encode(chunk).decode("utf-8")
-                                        await websocket.send_json({"type": "audio_chunk", "data": chunk_b64})
-                                    await websocket.send_json({"type": "audio_end"})
+                                print(f"[WebSocket] STT transcription error: {e}")
+                                await websocket.send_json({"type": "error", "text": "Transcription failed. Please check your microphone or API key."})
 
                     elif msg_type == "chat_text":
                         text = payload.get("text", "")
@@ -120,6 +122,6 @@ async def websocket_voice_endpoint(websocket: WebSocket):
                     pass
 
     except WebSocketDisconnect:
-        print("🔴 Browser WebSocket disconnected")
+        print("[WebSocket] Browser WebSocket disconnected")
     except Exception as e:
-        print(f"WebSocket error: {e}")
+        print(f"[WebSocket] WebSocket error: {e}")

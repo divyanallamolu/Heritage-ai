@@ -29,19 +29,28 @@ function setupInterviewPage() {
 
   // WebSocket Live Voice setup
   const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-  const wsHost = window.location.origin.includes(":5173") || window.location.origin.includes(":3000")
-    ? "127.0.0.1:8000"
-    : window.location.host;
+  const wsHost = (window.location.host && window.location.protocol.startsWith("http"))
+    ? window.location.host
+    : `${window.location.hostname || "localhost"}:5500`;
   const wsUrl = `${wsProtocol}//${wsHost}/ws/voice`;
+  let receivedWsTranscript = false;
 
   function initWebSocket() {
+    if (voiceSocket && (voiceSocket.readyState === WebSocket.OPEN || voiceSocket.readyState === WebSocket.CONNECTING)) {
+      return;
+    }
     try {
       voiceSocket = new WebSocket(wsUrl);
-      voiceSocket.onopen = () => console.log("🟢 Live Voice WebSocket connected");
+      voiceSocket.onopen = () => console.log("🟢 Live Voice WebSocket connected to", wsUrl);
       voiceSocket.onmessage = (event) => handleSocketMessage(event);
-      voiceSocket.onerror = (err) => console.warn("WebSocket warning:", err);
+      voiceSocket.onerror = (err) => {
+        console.warn("WebSocket warning (will use HTTP fallback):", err);
+      };
+      voiceSocket.onclose = () => {
+        console.log("WebSocket disconnected.");
+      };
     } catch (err) {
-      console.warn("WebSocket initialization warning:", err);
+      console.warn("WebSocket initialization warning (will use HTTP fallback):", err);
     }
   }
 
@@ -49,6 +58,7 @@ function setupInterviewPage() {
     try {
       const msg = JSON.parse(event.data);
       if (msg.type === "transcript" && msg.text) {
+        receivedWsTranscript = true;
         if (transcriptTextarea) {
           transcriptTextarea.value = transcriptTextarea.value
             ? `${transcriptTextarea.value} ${msg.text}`
@@ -74,6 +84,8 @@ function setupInterviewPage() {
   // Microphone Recording logic
   if (recordBtn && stopBtn) {
     recordBtn.addEventListener("click", async () => {
+      receivedWsTranscript = false;
+      initWebSocket();
       if (recordError) recordError.style.display = "none";
       if (!navigator.mediaDevices || !window.MediaRecorder) {
         if (recordError) {
@@ -101,11 +113,15 @@ function setupInterviewPage() {
               reader.onloadend = () => {
                 const base64Data = reader.result.split(",")[1];
                 const lang = document.getElementById("language-select")?.value || "English";
-                voiceSocket.send(JSON.stringify({
-                  type: "audio_base64",
-                  data: base64Data,
-                  language: lang
-                }));
+                try {
+                  voiceSocket.send(JSON.stringify({
+                    type: "audio_base64",
+                    data: base64Data,
+                    language: lang
+                  }));
+                } catch (wsErr) {
+                  console.warn("WebSocket send chunk failed:", wsErr);
+                }
               };
               reader.readAsDataURL(event.data);
             }
@@ -116,18 +132,28 @@ function setupInterviewPage() {
           if (audioChunks.length === 0) return;
           const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
 
-          if (recordStatus) recordStatus.textContent = "Transcribing with Deepgram...";
-          try {
-            const lang = document.getElementById("language-select")?.value || "English";
-            const result = await transcribeVoiceAudio(audioBlob, lang);
-            if (result && result.transcript && transcriptTextarea) {
-              transcriptTextarea.value = transcriptTextarea.value
-                ? `${transcriptTextarea.value} ${result.transcript}`
-                : result.transcript;
+          // Fallback to HTTP POST transcription if WS didn't yield transcript or WS is closed
+          if (!receivedWsTranscript || !voiceSocket || voiceSocket.readyState !== WebSocket.OPEN) {
+            if (recordStatus) recordStatus.textContent = "Transcribing with Deepgram via HTTP...";
+            try {
+              const lang = document.getElementById("language-select")?.value || "English";
+              const result = await transcribeVoiceAudio(audioBlob, lang);
+              if (result && result.transcript && transcriptTextarea) {
+                transcriptTextarea.value = transcriptTextarea.value
+                  ? `${transcriptTextarea.value} ${result.transcript}`
+                  : result.transcript;
+              }
+            } catch (err) {
+              console.warn("HTTP Transcription error:", err.message);
+              if (recordError) {
+                recordError.textContent = `Transcription failed: ${err.message}`;
+                recordError.style.display = "block";
+              }
+            } finally {
+              if (recordStatus) recordStatus.textContent = "Recording saved. Review transcript below.";
+              stream.getTracks().forEach(t => t.stop());
             }
-          } catch (err) {
-            console.warn("HTTP Transcription fallback note:", err.message);
-          } finally {
+          } else {
             if (recordStatus) recordStatus.textContent = "Recording saved. Review transcript below.";
             stream.getTracks().forEach(t => t.stop());
           }

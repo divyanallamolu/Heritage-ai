@@ -3,9 +3,9 @@
  * All communication with backend endpoints goes through this file.
  */
 
-const API_BASE_URL = window.location.origin.includes(":5173") || window.location.origin.includes(":3000")
-  ? "http://127.0.0.1:8000"
-  : window.location.origin;
+const API_BASE_URL = (window.location.origin && window.location.protocol.startsWith("http"))
+  ? window.location.origin
+  : `${window.location.protocol === "file:" ? "http:" : window.location.protocol}//${window.location.hostname || "localhost"}:5500`;
 
 /**
  * Generic fetch wrapper with automatic Authorization header injection
