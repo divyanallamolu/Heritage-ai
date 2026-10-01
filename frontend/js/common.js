@@ -2,6 +2,15 @@
  * HeritageAI Common UI Controller
  * Renders consistent Navbar, Footer, and Dropdown behavior across all pages.
  */
+if (!window.HERITAGE_API_BASE || window.HERITAGE_API_BASE.includes(":5500")) {
+  window.HERITAGE_API_BASE = "http://localhost:8000";
+}
+try {
+  if (localStorage.getItem("heritageai_api_url")?.includes(":5500")) {
+    localStorage.removeItem("heritageai_api_url");
+  }
+} catch (e) {}
+
 import { isLoggedIn, getUser, logout, getInitials } from "./auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {

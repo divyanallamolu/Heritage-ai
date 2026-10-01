@@ -2,7 +2,7 @@
  * HeritageAI Library Page Controller
  */
 import { CENTRAL_STORIES } from "../data/stories.js";
-import { getPublicLibrary } from "./api.js";
+import { getPublicLibrary } from "./api.js?v=2";
 
 let allStories = [];
 let savedIds = getSavedIds();

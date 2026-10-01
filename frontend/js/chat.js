@@ -1,7 +1,7 @@
 /**
  * HeritageAI Cultural AI Chat Controller
  */
-import { sendChatMessage } from "./api.js";
+import { sendChatMessage } from "./api.js?v=2";
 
 document.addEventListener("DOMContentLoaded", () => {
   setupChatPage();

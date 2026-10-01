@@ -17,7 +17,7 @@ def register_user(db: Session, user_data: UserCreate) -> User:
 
     existing_user = db.query(User).filter(User.email == email).first()
     if existing_user:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="An account already exists for this email. Please log in instead.")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="An account with this email already exists.")
 
     new_user = User(
         name=name,
@@ -30,14 +30,14 @@ def register_user(db: Session, user_data: UserCreate) -> User:
         db.refresh(new_user)
     except IntegrityError:
         db.rollback()
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="An account already exists for this email. Please log in instead.")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="An account with this email already exists.")
     return new_user
 
 
 def authenticate_user(db: Session, email: str, password: str) -> User:
     user = db.query(User).filter(User.email == email.strip().lower()).first()
     if not user or not verify_password(password, str(user.hashed_password)):
-        raise HTTPException(status_code=401, detail="Incorrect email or password")
+        raise HTTPException(status_code=401, detail="Invalid email or password.")
     return user
 
 

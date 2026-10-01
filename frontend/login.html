@@ -6,6 +6,14 @@
   <title>Login — HeritageAI</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/components.css">
+  <script>
+    window.HERITAGE_API_BASE = "http://localhost:8000";
+    try {
+      if (localStorage.getItem("heritageai_api_url")?.includes(":5500")) {
+        localStorage.removeItem("heritageai_api_url");
+      }
+    } catch (e) {}
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
 
@@ -46,7 +54,7 @@
 
   <script type="module" src="js/common.js"></script>
   <script type="module">
-    import { loginUser } from "./js/api.js";
+    import { loginUser } from "./js/api.js?v=2";
     import { saveToken, saveUser } from "./js/auth.js";
 
     document.getElementById("login-form")?.addEventListener("submit", async (e) => {

@@ -1,7 +1,7 @@
 /**
  * HeritageAI User Profile Controller
  */
-import { getMyInterviews, deleteInterview, getPublicLibrary } from "./api.js";
+import { getMyInterviews, deleteInterview, getPublicLibrary } from "./api.js?v=2";
 import { getUser, getInitials, requireAuth } from "./auth.js";
 import { CENTRAL_STORIES } from "../data/stories.js";
 

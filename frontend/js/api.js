@@ -3,11 +3,23 @@
  * All communication with backend endpoints goes through this file.
  */
 
-const API_BASE_URL = window.HERITAGE_API_BASE || localStorage.getItem("heritageai_api_url") || (
-  (window.location.origin && window.location.protocol.startsWith("http"))
-    ? window.location.origin
-    : `${window.location.protocol === "file:" ? "http:" : window.location.protocol}//${window.location.hostname || "localhost"}:5500`
-);
+function getApiBaseUrl() {
+  if (window.HERITAGE_API_BASE && !window.HERITAGE_API_BASE.includes(":5500")) {
+    return window.HERITAGE_API_BASE;
+  }
+  const stored = localStorage.getItem("heritageai_api_url");
+  if (stored && !stored.includes(":5500") && stored !== window.location.origin) {
+    return stored;
+  }
+  if (stored) {
+    localStorage.removeItem("heritageai_api_url");
+  }
+  const protocol = window.location.protocol === "https:" ? "https:" : "http:";
+  const host = window.location.hostname || "localhost";
+  return `${protocol}//${host}:8000`;
+}
+
+const API_BASE_URL = getApiBaseUrl();
 
 /**
  * Generic fetch wrapper with automatic Authorization header injection
@@ -24,20 +36,32 @@ async function apiRequest(endpoint, options = {}) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      ...options,
+      headers,
+    });
+  } catch (networkErr) {
+    throw new Error("Unable to connect to the server. Please make sure the backend is running.");
+  }
 
-  const data = await response.json().catch(() => null);
+  const contentType = response.headers.get("content-type") || "";
+  const isJson = contentType.includes("application/json");
+  const data = isJson ? await response.json().catch(() => null) : null;
 
   if (!response.ok) {
-    const errorMsg = data?.detail || `API request failed with status ${response.status}`;
+    let errorMsg = `API request failed with status ${response.status}`;
+    if (typeof data?.detail === "string") {
+      errorMsg = data.detail;
+    } else if (Array.isArray(data?.detail) && data.detail.length > 0) {
+      errorMsg = data.detail.map(err => err.msg || JSON.stringify(err)).join(", ");
+    }
     throw new Error(errorMsg);
   }
 
   if (data === null || typeof data !== "object") {
-    throw new Error("Invalid API response received from server.");
+    throw new Error(`API endpoint '${endpoint}' returned a non-JSON response.`);
   }
 
   return data;

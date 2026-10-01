@@ -2,7 +2,7 @@
  * HeritageAI HomePage Controller
  */
 import { CENTRAL_STORIES } from "../data/stories.js";
-import { getPublicLibrary } from "./api.js";
+import { getPublicLibrary } from "./api.js?v=2";
 import { getInitials } from "./auth.js";
 
 document.addEventListener("DOMContentLoaded", async () => {

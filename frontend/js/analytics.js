@@ -4,7 +4,7 @@
  */
 import { CENTRAL_STORIES } from "../data/stories.js";
 import { indiaMapPaths } from "./indiaMapPaths.js";
-import { getPublicLibrary } from "./api.js";
+import { getPublicLibrary } from "./api.js?v=2";
 
 let allStories = [];
 let selectedState = null;

@@ -2,7 +2,7 @@
  * HeritageAI Interview Page Controller
  * Handles Voice Recording, Deepgram STT, Groq Voice Assistant, ElevenLabs TTS, Gemini Summary, and Saving.
  */
-import { generateSummary, saveInterview, transcribeVoiceAudio } from "./api.js";
+import { generateSummary, saveInterview, transcribeVoiceAudio } from "./api.js?v=2";
 import { isLoggedIn } from "./auth.js";
 
 let mediaRecorder = null;
@@ -29,9 +29,7 @@ function setupInterviewPage() {
 
   // WebSocket Live Voice setup
   const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-  const wsHost = (window.location.host && window.location.protocol.startsWith("http"))
-    ? window.location.host
-    : `${window.location.hostname || "localhost"}:5500`;
+  const wsHost = `${window.location.hostname || "localhost"}:8000`;
   const wsUrl = `${wsProtocol}//${wsHost}/ws/voice`;
   let receivedWsTranscript = false;
 
