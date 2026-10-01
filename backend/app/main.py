@@ -18,6 +18,7 @@ app = FastAPI(title="HeritageAI API")
 
 # CORS Configuration
 origins = [
+    "https://heritage-ai-4.onrender.com",
     "http://localhost:5500",
     "http://127.0.0.1:5500",
     "http://localhost:8000",
@@ -27,6 +28,7 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=r"https://.*\.onrender\.com",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

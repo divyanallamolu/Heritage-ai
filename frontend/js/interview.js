@@ -28,9 +28,20 @@ function setupInterviewPage() {
   const saveStatus = document.getElementById("save-status");
 
   // WebSocket Live Voice setup
-  const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-  const wsHost = `${window.location.hostname || "localhost"}:8000`;
-  const wsUrl = `${wsProtocol}//${wsHost}/ws/voice`;
+  function getWebSocketUrl() {
+    if (window.HERITAGE_WS_URL) {
+      return window.HERITAGE_WS_URL;
+    }
+    const hostname = window.location.hostname || "localhost";
+    const isProd = hostname.includes("onrender.com") || window.location.protocol === "https:";
+    if (isProd) {
+      return "wss://heritage-ai-2.onrender.com/ws/voice";
+    }
+    const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    return `${wsProtocol}//${hostname}:8000/ws/voice`;
+  }
+
+  const wsUrl = getWebSocketUrl();
   let receivedWsTranscript = false;
 
   function initWebSocket() {

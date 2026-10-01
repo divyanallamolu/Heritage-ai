@@ -7,12 +7,18 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/components.css">
   <script>
-    window.HERITAGE_API_BASE = "http://localhost:8000";
-    try {
-      if (localStorage.getItem("heritageai_api_url")?.includes(":5500")) {
-        localStorage.removeItem("heritageai_api_url");
-      }
-    } catch (e) {}
+    (function() {
+      const hostname = window.location.hostname || "localhost";
+      const isProd = hostname.includes("onrender.com") || window.location.protocol === "https:";
+      window.HERITAGE_API_BASE = isProd
+        ? "https://heritage-ai-2.onrender.com"
+        : `${window.location.protocol === "https:" ? "https:" : "http:"}//${hostname}:8000`;
+      try {
+        if (localStorage.getItem("heritageai_api_url")?.includes(":5500")) {
+          localStorage.removeItem("heritageai_api_url");
+        }
+      } catch (e) {}
+    })();
   </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">

@@ -3,7 +3,7 @@
  * All communication with backend endpoints goes through this file.
  */
 
-function getApiBaseUrl() {
+export function getApiBaseUrl() {
   if (window.HERITAGE_API_BASE && !window.HERITAGE_API_BASE.includes(":5500")) {
     return window.HERITAGE_API_BASE;
   }
@@ -14,12 +14,18 @@ function getApiBaseUrl() {
   if (stored) {
     localStorage.removeItem("heritageai_api_url");
   }
+
+  const hostname = window.location.hostname || "localhost";
+  const isProd = hostname.includes("onrender.com") || window.location.protocol === "https:";
+  if (isProd) {
+    return "https://heritage-ai-2.onrender.com";
+  }
+
   const protocol = window.location.protocol === "https:" ? "https:" : "http:";
-  const host = window.location.hostname || "localhost";
-  return `${protocol}//${host}:8000`;
+  return `${protocol}//${hostname}:8000`;
 }
 
-const API_BASE_URL = getApiBaseUrl();
+export const API_BASE_URL = getApiBaseUrl();
 
 /**
  * Generic fetch wrapper with automatic Authorization header injection
