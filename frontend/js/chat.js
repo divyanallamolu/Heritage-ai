@@ -70,7 +70,7 @@ function setupChatPage() {
       messages.push({ sender: "ai", text: res.answer || "I couldn't generate a response." });
     } catch (err) {
       messages.pop();
-      messages.push({ sender: "ai", text: "I'm having trouble connecting to the Heritage knowledge vault. Please check your connection." });
+      messages.push({ sender: "ai", text: err.message || "I'm having trouble connecting to the Heritage knowledge vault. Please check your connection." });
     } finally {
       if (sendBtn) sendBtn.disabled = false;
       renderMessages();

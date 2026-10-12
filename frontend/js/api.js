@@ -16,13 +16,36 @@ export function getApiBaseUrl() {
   }
 
   const hostname = window.location.hostname || "localhost";
-  const isProd = hostname.includes("onrender.com") || window.location.protocol === "https:";
-  if (isProd) {
-    return "https://heritage-ai-2.onrender.com";
+  const port = window.location.port;
+
+  // Local development with Live Server on port 5500
+  if (port === "5500") {
+    return `http://${hostname}:8000`;
+  }
+
+  // When served by FastAPI in production or locally on port 8000
+  if (window.location.origin && window.location.origin !== "null") {
+    return window.location.origin;
   }
 
   const protocol = window.location.protocol === "https:" ? "https:" : "http:";
   return `${protocol}//${hostname}:8000`;
+}
+
+export function getWebSocketUrl(path = "/ws/voice") {
+  if (window.HERITAGE_WS_URL) {
+    return window.HERITAGE_WS_URL;
+  }
+  const apiBase = getApiBaseUrl();
+  try {
+    const url = new URL(apiBase);
+    const wsProtocol = url.protocol === "https:" ? "wss:" : "ws:";
+    return `${wsProtocol}//${url.host}${path}`;
+  } catch (e) {
+    const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const host = window.location.host || "localhost:8000";
+    return `${wsProtocol}//${host}${path}`;
+  }
 }
 
 export const API_BASE_URL = getApiBaseUrl();
@@ -31,6 +54,7 @@ export const API_BASE_URL = getApiBaseUrl();
  * Generic fetch wrapper with automatic Authorization header injection
  */
 async function apiRequest(endpoint, options = {}) {
+  const baseUrl = getApiBaseUrl();
   const token = localStorage.getItem("heritageai_token");
 
   const headers = {
@@ -44,7 +68,7 @@ async function apiRequest(endpoint, options = {}) {
 
   let response;
   try {
-    response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    response = await fetch(`${baseUrl}${endpoint}`, {
       ...options,
       headers,
     });
@@ -131,6 +155,7 @@ export async function sendChatMessage(message) {
 
 // Direct Voice Upload fallback (HTTP)
 export async function transcribeVoiceAudio(audioBlob, language = "English") {
+  const baseUrl = getApiBaseUrl();
   const formData = new FormData();
   formData.append("audio", audioBlob, "recording.webm");
   formData.append("language", language);
@@ -139,7 +164,7 @@ export async function transcribeVoiceAudio(audioBlob, language = "English") {
   const headers = {};
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const response = await fetch(`${API_BASE_URL}/voice/transcribe`, {
+  const response = await fetch(`${baseUrl}/voice/transcribe`, {
     method: "POST",
     headers,
     body: formData,

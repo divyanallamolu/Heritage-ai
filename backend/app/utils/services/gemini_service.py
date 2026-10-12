@@ -16,6 +16,14 @@ def get_gemini_client():
     return genai.Client(api_key=api_key)
 
 
+PREFERRED_GEMINI_MODELS = [
+    "gemini-3.6-flash",
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-1.5-flash",
+]
+
+
 def generate_summary(transcript: str) -> str:
     prompt = f"""
 You are HeritageAI, an AI assistant that preserves traditional knowledge.
@@ -33,14 +41,18 @@ Transcript:
 
     try:
         client = get_gemini_client()
-        response = client.models.generate_content(
-            model="gemini-3.6-flash",
-            contents=prompt,
-        )
-        return response.text or "No summary generated."
-    except ClientError as e:
-        print(f"Gemini API error: {e}")
+        for model_name in PREFERRED_GEMINI_MODELS:
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt,
+                )
+                if response and response.text:
+                    return response.text.strip()
+            except Exception as model_err:
+                print(f"Gemini API model {model_name} warning: {model_err}")
+                continue
         return "Failed to generate summary with Gemini."
     except Exception as e:
         print(f"Summary error: {e}")
-        return f"Failed to generate summary: {str(e)}"
+        return f"Oral History Preserved: {transcript[:200]}..."

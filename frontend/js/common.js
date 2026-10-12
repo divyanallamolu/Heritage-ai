@@ -3,12 +3,16 @@
  * Renders consistent Navbar, Footer, and Dropdown behavior across all pages.
  */
 const hostname = window.location.hostname || "localhost";
-const isProd = hostname.includes("onrender.com") || window.location.protocol === "https:";
+const port = window.location.port;
 
 if (!window.HERITAGE_API_BASE || window.HERITAGE_API_BASE.includes(":5500")) {
-  window.HERITAGE_API_BASE = isProd
-    ? "https://heritage-ai-2.onrender.com"
-    : `${window.location.protocol === "https:" ? "https:" : "http:"}//${hostname}:8000`;
+  if (port === "5500") {
+    window.HERITAGE_API_BASE = `http://${hostname}:8000`;
+  } else if (window.location.origin && window.location.origin !== "null") {
+    window.HERITAGE_API_BASE = window.location.origin;
+  } else {
+    window.HERITAGE_API_BASE = `http://${hostname}:8000`;
+  }
 }
 try {
   if (localStorage.getItem("heritageai_api_url")?.includes(":5500")) {

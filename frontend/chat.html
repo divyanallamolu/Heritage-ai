@@ -6,6 +6,26 @@
   <title>AI Heritage Assistant — HeritageAI</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/components.css">
+  <script>
+    (function() {
+      const hostname = window.location.hostname || "localhost";
+      const port = window.location.port;
+      if (!window.HERITAGE_API_BASE || window.HERITAGE_API_BASE.includes(":5500")) {
+        if (port === "5500") {
+          window.HERITAGE_API_BASE = `http://${hostname}:8000`;
+        } else if (window.location.origin && window.location.origin !== "null") {
+          window.HERITAGE_API_BASE = window.location.origin;
+        } else {
+          window.HERITAGE_API_BASE = `http://${hostname}:8000`;
+        }
+      }
+      try {
+        if (localStorage.getItem("heritageai_api_url")?.includes(":5500")) {
+          localStorage.removeItem("heritageai_api_url");
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
 
@@ -56,7 +76,7 @@
 
   <footer id="main-footer"></footer>
 
-  <script type="module" src="js/common.js"></script>
-  <script type="module" src="js/chat.js"></script>
+  <script type="module" src="js/common.js?v=2"></script>
+  <script type="module" src="js/chat.js?v=2"></script>
 </body>
 </html>

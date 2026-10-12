@@ -2,17 +2,83 @@ import os
 from dotenv import load_dotenv
 from google import genai
 from sqlalchemy.orm import Session
-
 from app.models.interview import Interview
+
+load_dotenv()
+
+PREFERRED_GEMINI_MODELS = [
+    "gemini-3.6-flash",
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-1.5-flash",
+]
+
 
 def get_gemini_client():
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
-        raise ValueError(
-            "GEMINI_API_KEY environment variable is not set. "
-            "Please add this environment variable in your deployment configuration."
+        return None
+    try:
+        return genai.Client(api_key=api_key)
+    except Exception:
+        return None
+
+
+def generate_knowledge_vault_fallback(interviews: list, message: str) -> str:
+    if not interviews:
+        return (
+            "I searched the Heritage Knowledge Vault for your query, but could not find a direct "
+            "matching oral history in our preserved recordings yet. You can explore all published stories in the Heritage Library catalog."
         )
-    return genai.Client(api_key=api_key)
+
+    lines = [
+        "Here are the relevant oral recordings preserved in the Heritage Knowledge Vault:\n"
+    ]
+    for item in interviews[:3]:
+        name = safe_text(item.elder_name)
+        location = format_location(item)
+        summary = safe_text(item.ai_summary) or (safe_text(item.transcript)[:180] + "...")
+        loc_str = f" ({location})" if location else ""
+        lines.append(f"• **{name}**{loc_str}: {summary}\n")
+
+    lines.append("Explore these complete transcripts and recordings in our Heritage Library.")
+    return "\n".join(lines)
+
+
+def generate_chat_response(db: Session, message: str) -> str:
+    relevant_interviews = search_relevant_interviews(db, message)
+    context = build_context(relevant_interviews)
+
+    prompt = f"""You are HeritageAI, a warm, knowledgeable cultural heritage research assistant.
+
+{context}
+
+User question: {message}
+
+Instructions:
+1. If relevant interviews are present in the Heritage Library Context above, ground your answer in those recordings. Explain details directly from the stories and cite the elder names and locations (e.g., "According to Lakshmi Devi from Dharmavaram...").
+2. Do NOT invent elder stories, do NOT hallucinate interview details, and do NOT claim unsupported information came from an interview.
+3. If no matching interviews are found in the context, politely and warmly state that there are currently no direct oral recordings on this topic in the local archive, and share respectful general cultural details about the tradition if applicable.
+4. Maintain a warm, storytelling tone that honors traditional knowledge and elders.
+"""
+
+    client = get_gemini_client()
+    if client:
+        for model_name in PREFERRED_GEMINI_MODELS:
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt,
+                )
+                if response and response.text and response.text.strip():
+                    return response.text.strip()
+            except Exception as e:
+                print(f"[Gemini Chat Warning] Model {model_name} call failed: {e}")
+                continue
+
+    # Graceful fallback: return answer derived directly from Knowledge Vault
+    return generate_knowledge_vault_fallback(relevant_interviews, message)
+
 
 TOPIC_SYNONYMS = {
     "recipe": ["recipe", "food", "cooking", "dish", "pickle", "curry", "rotte", "sangati"],
@@ -134,14 +200,13 @@ def search_relevant_interviews(db: Session, message: str, top_n: int = 5) -> lis
     search_terms = expand_query_terms(message)
 
     if not search_terms:
-        return candidates[:top_n]  # return default set if empty
+        return []
 
     scored = [(interview, score_interview(interview, search_terms)) for interview in candidates]
     relevant = [item for item in scored if item[1] > 0]
     
-    # If no records scored hits, return top mock archives matching general terms
     if not relevant:
-        return MOCK_ARCHIVES[:top_n]
+        return []
 
     relevant.sort(key=lambda item: item[1], reverse=True)
     return [interview for interview, score in relevant[:top_n]]
@@ -159,9 +224,9 @@ def format_location(interview) -> str:
 
 def build_context(interviews: list) -> str:
     if not interviews:
-        return "No matching interviews were found in the Heritage Library."
+        return "No matching interviews were found in the Heritage Library archive for this query."
 
-    context_parts = ["Heritage Library Context\n"]
+    context_parts = ["Heritage Library Context:\n"]
     for index, interview in enumerate(interviews, start=1):
         location = format_location(interview) or "Unknown"
         summary = safe_text(interview.ai_summary) or "No summary available"
@@ -176,30 +241,3 @@ def build_context(interviews: list) -> str:
             f"Summary: {summary}\n"
         )
     return "\n".join(context_parts)
-
-
-def generate_chat_response(db: Session, message: str) -> str:
-    relevant_interviews = search_relevant_interviews(db, message)
-    context = build_context(relevant_interviews)
-
-    prompt = f"""You are HeritageAI, a warm, knowledgeable cultural heritage research assistant.
-    
-    Answer using the Heritage Library context below. If the user's question relates to these local elder recordings, explain details directly from the stories, citing the elder names and locations.
-    
-    If the context does not contain direct answers to the user's prompt (e.g. they ask about a general festival or recipe not documented in the archives yet), search your broad general knowledge about Indian heritage and traditions to answer them. In this case, prefix your answer with a polite, warm sentence noting that while you couldn't find a direct recording matching this in the local database, you can share general details about the tradition.
-    
-    Maintain a warm, storytelling tone that shows deep respect for traditional culture and elders.
-    
-    {context}
-    
-    User question: {message}
-    """
-
-    client = get_gemini_client()
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt,
-    )
-
-    response_text = response.text
-    return response_text.strip() if response_text else "I couldn't generate a response. Please try again."
