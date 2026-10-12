@@ -23,8 +23,13 @@ export function getApiBaseUrl() {
     return `http://${hostname}:8000`;
   }
 
+  // Deployed frontend static site on Render routes to backend web service
+  if (hostname === "heritage-ai-4.onrender.com") {
+    return "https://heritage-ai-3.onrender.com";
+  }
+
   // When served by FastAPI in production or locally on port 8000
-  if (window.location.origin && window.location.origin !== "null") {
+  if (window.location.origin && window.location.origin !== "null" && !window.location.origin.startsWith("file:")) {
     return window.location.origin;
   }
 

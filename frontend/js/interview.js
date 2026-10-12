@@ -239,9 +239,14 @@ function setupInterviewPage() {
             } else if (msg.type === "session_ended") {
               if (recordStatus) recordStatus.textContent = "Recording stopped. Review transcript below.";
             } else if (msg.type === "error") {
-              console.warn("WebSocket server error:", msg.message || msg.text);
+              const errMsg = msg.message || msg.text || "Deepgram streaming error.";
+              console.warn("WebSocket server error:", errMsg);
+              if (recordError) {
+                recordError.textContent = `Server: ${errMsg}`;
+                recordError.style.display = "block";
+              }
               if (recordStatus && !receivedWsTranscript) {
-                recordStatus.textContent = "Live transcription unavailable (will transcribe via HTTP on stop).";
+                recordStatus.textContent = "Live transcription error (will transcribe via HTTP on stop).";
               }
             }
           } catch (e) {}

@@ -13,7 +13,9 @@
       if (!window.HERITAGE_API_BASE || window.HERITAGE_API_BASE.includes(":5500")) {
         if (port === "5500") {
           window.HERITAGE_API_BASE = `http://${hostname}:8000`;
-        } else if (window.location.origin && window.location.origin !== "null") {
+        } else if (hostname === "heritage-ai-4.onrender.com") {
+          window.HERITAGE_API_BASE = "https://heritage-ai-3.onrender.com";
+        } else if (window.location.origin && window.location.origin !== "null" && !window.location.origin.startsWith("file:")) {
           window.HERITAGE_API_BASE = window.location.origin;
         } else {
           window.HERITAGE_API_BASE = `http://${hostname}:8000`;

@@ -4,6 +4,9 @@ import base64
 import asyncio
 import logging
 import websockets
+from dotenv import load_dotenv
+
+load_dotenv()
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException, WebSocket, WebSocketDisconnect
 from app.services.deepgram_service import transcribe_audio_bytes
 from app.services.groq_service import get_groq_response_async

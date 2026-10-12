@@ -1,5 +1,16 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables from system or local .env files
+load_dotenv()
+_backend_env = Path(__file__).resolve().parent.parent / ".env"
+if _backend_env.exists():
+    load_dotenv(dotenv_path=_backend_env)
+_root_env = Path(__file__).resolve().parent.parent.parent / ".env"
+if _root_env.exists():
+    load_dotenv(dotenv_path=_root_env)
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
